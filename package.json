@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "babel-node": "./node_modules/.bin/babel-node --stage 0",
-    "start": "npm run babel-node ./server/server.js",
-    "server-dev": "./node_modules/.bin/nodemon --exec npm run babel-node -- ./server/server.js"
+    "start": "npm run babel-node ./index.js",
+    "server-dev": "./node_modules/.bin/nodemon --exec npm run babel-node -- ./index.js"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,10 @@
   "dependencies": {
     "babel": "^5.8.23",
     "express": "^4.13.3",
+    "immutable": "^3.7.4",
     "react": "^0.13.3",
+    "react-redux": "^1.0.1",
+    "redux": "^1.0.1",
     "webpack": "^1.12.0"
   },
   "devDependencies": {
@@ -43,7 +46,7 @@
     "nodemon": "^1.4.1",
     "opn": "^3.0.2",
     "react-hot-loader": "^1.2.9",
-    "react-router": "^0.13.3",
+    "react-router": "^1.0.0-beta3",
     "rimraf": "^2.4.3",
     "sass-loader": "^2.0.1",
     "style-loader": "^0.12.3",
