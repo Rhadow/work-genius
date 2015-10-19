@@ -1,20 +1,20 @@
 var Webpack = require('webpack'),
-    path = require('path');
+    path = require('path'),
+    autoprefixer = require('autoprefixer'),
+    precss = require('precss');
 
 var eslintrcPath = path.resolve(__dirname, '.eslintrc'),
     nodeModulesPath = path.resolve(__dirname, 'node_modules'),
-    buildPath = path.resolve(__dirname, 'build'),
-    entryPath = path.resolve(__dirname, 'src', 'app.js'),
-    sourcePath = path.resolve(__dirname, 'src');
+    buildPath = path.resolve(__dirname, 'src', 'build'),
+    mainPath = path.resolve(__dirname, 'src', 'index.js');
 
 var config = {
     devtool: 'eval',
     watch: true,
     entry: {
         app: [
-            'webpack/hot/only-dev-server',
-            'webpack-dev-server/client?http://localhost:8080',
-            entryPath
+            'webpack-hot-middleware/client',
+            mainPath
         ]
     },
     output: {
@@ -33,12 +33,12 @@ var config = {
         loaders: [
             {
                 test: /\.js(x)?$/,
-                loaders: ['react-hot', 'babel'],
-                include: sourcePath
+                loader: 'babel',
+                exclude: nodeModulesPath
             },
             {
                 test: /\.(css|scss)$/,
-                loaders: ['style', 'css', 'sass']
+                loaders: ['style', 'css', 'sass', 'postcss']
             },
             {
                 test: /\.(png|jpg|jpeg|gif|svg)$/,
@@ -52,11 +52,7 @@ var config = {
     },
     plugins: [
         new Webpack.HotModuleReplacementPlugin(),
-        new Webpack.DefinePlugin({
-            'process.env': {
-                BROWSER: JSON.stringify(true)
-            }
-        }),
+        //new Webpack.optimize.CommonsChunkPlugin('vendors.bundle.js'),
         new Webpack.NoErrorsPlugin()
     ],
     resolve: {
@@ -64,6 +60,9 @@ var config = {
     },
     eslint: {
         configFile: eslintrcPath
+    },
+    postcss: function () {
+        return [autoprefixer, precss];
     }
 };
 
