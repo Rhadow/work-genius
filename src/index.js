@@ -1,5 +1,19 @@
+// Libraries
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App/App';
+import { Provider } from 'react-redux';
+import Router from 'react-router';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
+// Store
+import configureStore from './store/configureStore';
+// Routes
+import appRoutes from './routes/appRoutes';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const store = configureStore();
+
+ReactDOM.render(
+	<Provider store={store}>
+	    <Router history={createBrowserHistory()}>{appRoutes}</Router>
+	</Provider>,
+	document.getElementById('root')
+);
