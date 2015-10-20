@@ -1,16 +1,22 @@
+// Libraries
 import React from 'react';
 import { Route } from 'react-router';
+// Components
+import App from '../containers/App/App';
+import DashboardPage from '../containers/DashboardPage/DashboardPage';
+import TaskPage from '../containers/TaskPage/TaskPage';
+import PTOPage from '../containers/PTOPage/PTOPage';
 
-// Pages
-import App from '../components/App/App';
-import Dashboard from '../pages/Dashboard/Dashboard';
-import PTO from '../pages/PTO/PTO';
-import Activity from '../pages/Activity/Activity';
+// Demo Component (To be removed)
+import DemoPage from '../containers/DemoPage/DemoPage';
 
-export default (
+const appRoutes = (
 	<Route component={App}>
-	    <Route path="/" component={Dashboard} />
-	    <Route path="/pto" component={PTO} />
-	    <Route path="/activity" component={Activity} />
+	    <Route path="/" component={DashboardPage} />
+	    <Route path="/task" component={TaskPage} />
+	    <Route path="/pto" component={PTOPage} />
+	    <Route path="/redux-demo" component={DemoPage} />
 	</Route>
 );
+
+export default appRoutes;

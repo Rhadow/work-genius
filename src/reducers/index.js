@@ -1,1 +1,8 @@
-export { default as test } from './test';
+import { combineReducers } from 'redux';
+import demo from './demo-reducer';
+
+const rootReducer = combineReducers({
+	demo
+});
+
+export default rootReducer;
