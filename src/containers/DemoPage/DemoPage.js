@@ -1,6 +1,6 @@
 // Styles
 import './_Demo.scss';
-// React & Redux
+// Libraries
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -14,17 +14,27 @@ class DemoPage extends Component {
 		const loadingClassNames = classnames({
 			hide: !demoState.isLoading
 		});
-		const counterClassNames = classnames({
-			hide: demoState.isLoading
-		});
 
 		return (
 			<section>
-			    <button onClick={demoActions.increaseCounterLater}>later</button>
-			    <button onClick={demoActions.increaseCounter}>+</button>
-			    <span className={counterClassNames}>{demoState.counter}</span>
-			    <span className={loadingClassNames}>Loading...</span>
-			    <button onClick={demoActions.decreaseCounter}>-</button>
+				<button
+				    className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+				    disabled={demoState.isLoading}
+				    onClick={demoActions.decreaseCounter}>
+				    <i className="material-icons">remove</i>
+				</button>
+			    <span>{demoState.counter}</span>
+		        <button
+				    className="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+				    disabled={demoState.isLoading}
+				    onClick={demoActions.increaseCounter}>
+				    <i className="material-icons">add</i>
+				</button>
+			    <button onClick={demoActions.increaseCounterLater}>Increase Later</button>
+			    <span className={loadingClassNames}>
+			        Loading...
+					<div className="mdl-spinner mdl-js-spinner is-active"></div>
+			    </span>
 			</section>
 		);
 	}

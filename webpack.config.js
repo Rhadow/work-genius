@@ -1,12 +1,16 @@
 var Webpack = require('webpack'),
     path = require('path'),
     autoprefixer = require('autoprefixer'),
-    precss = require('precss');
+    precss = require('precss'),
+    pkg = require('./package.json');
 
 var eslintrcPath = path.resolve(__dirname, '.eslintrc'),
     nodeModulesPath = path.resolve(__dirname, 'node_modules'),
     buildPath = path.resolve(__dirname, 'src', 'build'),
     mainPath = path.resolve(__dirname, 'src', 'index.js');
+
+// Raise tread pool size to prevent bundling stuck issue
+process.env.UV_THREADPOOL_SIZE = 100;
 
 var config = {
     devtool: 'eval',
@@ -15,7 +19,8 @@ var config = {
         app: [
             'webpack-hot-middleware/client',
             mainPath
-        ]
+        ],
+        vendors: pkg.vendors
     },
     output: {
         path: buildPath,
@@ -52,7 +57,7 @@ var config = {
     },
     plugins: [
         new Webpack.HotModuleReplacementPlugin(),
-        //new Webpack.optimize.CommonsChunkPlugin('vendors.bundle.js'),
+        new Webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.bundle.js'),
         new Webpack.NoErrorsPlugin()
     ],
     resolve: {

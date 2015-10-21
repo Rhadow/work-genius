@@ -10,10 +10,14 @@ var nodeModulesPath = path.resolve(__dirname, 'node_modules'),
     cssBundleName = util.format('style.bundle.%s.css', pkg.version),
     jsBundleName = util.format('js/app.bundle.%s.js', pkg.version);
 
+// Raise tread pool size to prevent bundling stuck issue
+process.env.UV_THREADPOOL_SIZE = 100;
+
 var config = {
     devtool: 'source-map',
     entry: {
-        app: [mainPath]
+        app: [mainPath],
+        vendors: pkg.vendors
     },
     output: {
         path: buildPath,
@@ -50,7 +54,7 @@ var config = {
                 'NODE_ENV': JSON.stringify('production')
             }
         }),
-        //new Webpack.optimize.CommonsChunkPlugin(util.format('js/common.%s.js', pkg.version)),
+        new Webpack.optimize.CommonsChunkPlugin('vendors', util.format('js/vendors.%s.js', pkg.version)),
         new Webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false

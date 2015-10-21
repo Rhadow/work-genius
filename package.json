@@ -26,6 +26,7 @@
     "classnames": "^2.2.0",
     "history": "^1.12.5",
     "immutable": "^3.7.5",
+    "material-design-lite": "^1.0.5",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "react-redux": "^4.0.0",
@@ -59,5 +60,8 @@
     "webpack": "^1.12.2",
     "webpack-dev-middleware": "^1.2.0",
     "webpack-hot-middleware": "^2.4.1"
-  }
+  },
+  "vendors": [
+    "./node_modules/material-design-lite/material.min.js"
+  ]
 }

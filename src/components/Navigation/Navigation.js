@@ -4,6 +4,13 @@ import './_Navigation.scss';
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
+// Stateless functional components
+let HeaderLogo = () => {
+	return (
+		<span className="navigation__header-logo"></span>
+	);
+};
+
 class Navigation extends Component {
 	_onNavItemsClick(e) {
 		const { onNavItemsClick } = this.props;
@@ -15,10 +22,12 @@ class Navigation extends Component {
 	}
 
 	render() {
-		const { headerText, navItems } = this.props;
+		const { headerTitle, navItems, hasLogo } = this.props;
+		let headerLogoHtml = hasLogo ? <HeaderLogo /> : null;
 		let navItemsHtml = navItems.map((item, index) => {
 			return (
 				<Link
+				    className="mdl-navigation__link"
 				    to={item.link}
 				    key={`navItem${index}`}
 				    name={`${item.displayText}-${index}`}
@@ -29,23 +38,29 @@ class Navigation extends Component {
 		});
 
 		return (
-			<nav>
-			    <header>
-				    { headerText }
-				</header>
-				{ navItemsHtml }
-			</nav>
+			<div className="mdl-layout__drawer">
+			    <span className="mdl-layout-title">
+				    { headerLogoHtml }
+				    <span className="navigation__header-title">{ headerTitle }</span>
+				</span>
+				<nav className="mdl-navigation">
+					{ navItemsHtml }
+				</nav>
+			</div>
 		);
 	}
 }
 
 Navigation.propTypes = {
-	headerText: PropTypes.string.isRequired,
-	navItems: PropTypes.array.isRequired,
-	onNavItemsClick: PropTypes.func
+	headerTitle: PropTypes.string,
+	hasLogo: PropTypes.bool,
+	onNavItemsClick: PropTypes.func,
+	navItems: PropTypes.array.isRequired
 };
 
 Navigation.defaultProps = {
+	headerTitle: '',
+	hasLogo: false,
 	onNavItemsClick: () => {}
 };
 
