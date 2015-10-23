@@ -1,9 +1,11 @@
 // Styles
 import './_App.scss';
 // React & Redux
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 // Components
 import Navigation from '../../components/Navigation/Navigation';
+import PageHeader from '../../components/Page-Header/Page-Header';
 
 class App extends Component {
 	componentDidUpdate() {
@@ -15,21 +17,38 @@ class App extends Component {
 		/* eslint-enable */
 	}
 
+	_mapPathNameToDisplayName(pathName, navItems) {
+		let filteredItems = navItems.filter((item) => {
+			return item.link === pathName;
+		});
+
+		return filteredItems[0].displayText;
+	}
+
+	_navItemsClickHandler() {
+		// console.log(name, index);
+	}
+
 	render() {
+		const {
+			navHeaderTitle,
+			navItems,
+			hasLogo
+		} = this.props.appState;
+
+		// Location props are coming from react router
+		const { pathname } = this.props.location;
+
 		return (
 			// The outer-most <div> is used by Material Design Lite to prevent DOM clash with React
 			<div>
 				<section className="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
 					<Navigation
-					    headerTitle="WG"
-					    navItems={[
-					    	{displayText: 'Dashboard', link: '/'},
-					    	{displayText: 'Task', link: '/task'},
-					    	{displayText: 'PTO', link: '/pto'},
-					    	{displayText: 'Redux Demo', link: '/redux-demo'},
-					    ]}
-					    hasLogo
-					    onNavItemsClick={(name, index) => {console.log(name, index);}} />
+					    headerTitle={navHeaderTitle}
+					    navItems={navItems}
+					    hasLogo={hasLogo}
+					    onNavItemsClick={this._navItemsClickHandler.bind(this)} />
+					<PageHeader headerTitle={this._mapPathNameToDisplayName(pathname, navItems)} />
 					<main className="mdl-layout__content">
 					    <div className="page-content">
 							{this.props.children}
@@ -41,4 +60,17 @@ class App extends Component {
 	}
 }
 
-export default App;
+App.propTypes = {
+	appState: PropTypes.object.isRequired,
+	location: PropTypes.object.isRequired
+};
+
+function mapStateToProps(state) {
+	return {
+		appState: state.app.toJS()
+	};
+}
+
+export default connect(
+	mapStateToProps
+)(App);
