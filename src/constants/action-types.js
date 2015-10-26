@@ -1,4 +1,7 @@
+// Demo page actions
 export const INCREASE_COUNTER = 'INCREASE_COUNTER';
 export const DECREASE_COUNTER = 'DECREASE_COUNTER';
 export const INCREASE_COUNTER_LATER = 'INCREASE_COUNTER_LATER';
-export const ADD_BUG_TO_TABLE = 'ADD_BUG_TO_TABLE';
+
+// Task page actions
+export const SORT_BUG_TABLE_BY_CATEGORY = 'SORT_BUG_TABLE_BY_CATEGORY';

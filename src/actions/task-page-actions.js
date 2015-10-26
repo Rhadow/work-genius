@@ -1,8 +1,8 @@
 import * as actionTypes from '../constants/action-types';
 
-export function addBugToTable(newBug) {
+export function sortBugTableByCategory(category) {
 	return {
-		type: actionTypes.ADD_BUG_TO_TABLE,
-		newBug
+		type: actionTypes.SORT_BUG_TABLE_BY_CATEGORY,
+		category
 	};
-};
+}
