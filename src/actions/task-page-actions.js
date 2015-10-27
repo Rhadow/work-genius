@@ -6,3 +6,16 @@ export function sortBugTableByCategory(category) {
 		category
 	};
 }
+
+export function filterBugTable(filterConditions) {
+	return {
+		type: actionTypes.FILTER_BUG_TABLE,
+		filterConditions
+	};
+}
+
+export function resetBugTable() {
+	return {
+		type: actionTypes.RESET_BUG_TABLE
+	};
+}

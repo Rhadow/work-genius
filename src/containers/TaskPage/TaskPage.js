@@ -11,17 +11,20 @@ import BugsTable from '../../components/Bugs-Table/Bugs-Table';
 
 class TaskPage extends Component {
 	render() {
-		const { bugsTableData, sortBy } = this.props.taskPageState;
-		const { sortBugTableByCategory } = this.props.taskPageActions;
+		const { bugsTableData, sortBy, bugsTableOriginalData } = this.props.taskPageState;
+		const { sortBugTableByCategory, filterBugTable, resetBugTable } = this.props.taskPageActions;
 
 		return (
 			<section>
 			    <span>Task Page</span>
 			    <BugsTable
 			        data={bugsTableData}
+			        originalData={bugsTableOriginalData}
 			        enableSort
 			        sortBy= {sortBy}
-			        onSortHandler={sortBugTableByCategory} />
+			        onSortHandler={sortBugTableByCategory}
+			        onFilterHandler={filterBugTable}
+			        onUnmountHandler={resetBugTable} />
 			</section>
 		);
 	}
