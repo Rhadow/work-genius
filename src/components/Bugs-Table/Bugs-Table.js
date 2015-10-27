@@ -7,7 +7,7 @@ import classnames from 'classnames';
 
 let FilterIcons = ({ sortBy, onSortHandler, header, enableSort }) => {
 	const buttonClassNames = classnames('mdl-button mdl-js-button mdl-button--icon', {
-		'mdl-button--colored': sortBy === header
+		'mdl-button--colored': sortBy.indexOf(header) >= 0
 	});
 	let filterIconHtml = (<div></div>);
 
@@ -170,7 +170,7 @@ BugsTable.propTypes = {
 	data: PropTypes.array.isRequired,
 	originalData: PropTypes.array.isRequired,
 	enableSort: PropTypes.bool,
-	sortBy: PropTypes.string,
+	sortBy: PropTypes.array,
 	onSortHandler: PropTypes.func,
 	onFilterHandler: PropTypes.func,
 	onUnmountHandler: PropTypes.func
@@ -178,7 +178,7 @@ BugsTable.propTypes = {
 
 BugsTable.defaultProps = {
 	enableSort: false,
-	sortBy: '',
+	sortBy: [],
 	onSortHandler: () => {},
 	onFilterHandler: () => {},
 	onUnmountHandler: () => {}

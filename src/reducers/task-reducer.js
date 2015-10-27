@@ -8,7 +8,7 @@ import { FAKE_TASK_DATA } from './fake-data';
 const initialState = Map({
 	bugsTableOriginalData: FAKE_TASK_DATA,
 	bugsTableData: FAKE_TASK_DATA,
-	sortBy: '',
+	sortBy: List.of(),
 	filterConditions: Map({
 		'Developer': '',
 		'PRI': '',
@@ -62,15 +62,19 @@ function sortAlphaNum(a,b) {
 
 function sortOriginal(state) {
 	let nextState = state;
-	let category = nextState.get('sortBy');
 
-	if (category) {
-		nextState = nextState.update('bugsTableData', (data) => {
-			return data.sort((curr, next) => {
-				return sortAlphaNum(curr.get(category), next.get(category));
+	nextState = nextState.update('bugsTableData', (data) => {
+		return data.sort((curr, next) => {
+			let result = 0;
+			nextState.get('sortBy').forEach((category) => {
+				let tempResult = sortAlphaNum(curr.get(category), next.get(category));
+				if (tempResult !== 0 && result === 0) {
+					result = tempResult;
+				}
 			});
+			return result;
 		});
-	}
+	});
 
 	return nextState;
 }
@@ -79,12 +83,15 @@ export default function taskReducer(state = initialState, action) {
 	let nextState = state;
 	switch (action.type) {
 		case actionTypes.SORT_BUG_TABLE_BY_CATEGORY:
-			let category = state.get('sortBy');
-
-			if (category === action.category) {
-				nextState = state.set('sortBy', '');
+			let indexToBeDeleted = state.get('sortBy').indexOf(action.category);
+			if (indexToBeDeleted === -1) {
+				nextState = state.update('sortBy', (categories) => {
+					return categories.push(action.category);
+				});
 			} else {
-				nextState = state.set('sortBy', action.category);
+				nextState = state.update('sortBy', (categories) => {
+					return categories.delete(indexToBeDeleted);
+				});
 			}
 			nextState = filterOriginal(nextState);
 			nextState = sortOriginal(nextState);
@@ -99,7 +106,9 @@ export default function taskReducer(state = initialState, action) {
 			    .update('bugsTableData', () => {
 					return state.get('bugsTableOriginalData');
 				})
-			    .set('sortBy', '')
+			    .set('sortBy',
+			    	List.of()
+			    )
 			    .set(
 			    	'filterConditions',
 			    	Map({
