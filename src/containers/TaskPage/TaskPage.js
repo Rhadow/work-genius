@@ -8,14 +8,20 @@ import { bindActionCreators } from 'redux';
 import * as TaskPageActions from '../../actions/task-page-actions';
 // Components
 import BugsTable from '../../components/Bugs-Table/Bugs-Table';
+import Spinner from '../../components/Spinner/Spinner';
 
 class TaskPage extends Component {
+	componentWillMount() {
+		const { fetchTasks } = this.props.taskPageActions;
+		fetchTasks();
+	}
 	render() {
-		const { bugsTableData, sortBy, bugsTableOriginalData } = this.props.taskPageState;
+		const { bugsTableData, sortBy, bugsTableOriginalData, isLoading } = this.props.taskPageState;
 		const { sortBugTableByCategory, filterBugTable, resetBugTable } = this.props.taskPageActions;
 
 		return (
-			<section>
+			<section className="task-page">
+				<Spinner hide={!isLoading} />
 			    <span>Task Page</span>
 			    <BugsTable
 			        data={bugsTableData}

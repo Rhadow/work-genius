@@ -1,13 +1,33 @@
 // Libraries
-import { Map, List, OrderedMap } from 'immutable';
+import { Map, List, OrderedMap, fromJS } from 'immutable';
 // Constants
 import * as actionTypes from '../constants/action-types';
-// Fake Data
-import { FAKE_TASK_DATA } from './fake-data';
 
 const initialState = Map({
-	bugsTableOriginalData: FAKE_TASK_DATA,
-	bugsTableData: FAKE_TASK_DATA,
+	isLoading: false,
+	loadingError: undefined,
+	bugsTableOriginalData: List.of(OrderedMap({
+		'Developer': '',
+		'Title': '',
+		'PRI': '',
+		'Status': '',
+		'Dev (%)': '',
+		'QA (%)': '',
+		'QA': '',
+		'Project': '',
+		'ETA': ''
+	})),
+	bugsTableData: List.of(OrderedMap({
+		'Developer': '',
+		'Title': '',
+		'PRI': '',
+		'Status': '',
+		'Dev (%)': '',
+		'QA (%)': '',
+		'QA': '',
+		'Project': '',
+		'ETA': ''
+	})),
 	sortBy: List.of(),
 	filterConditions: Map({
 		'Developer': '',
@@ -79,6 +99,38 @@ function sortOriginal(state) {
 	return nextState;
 }
 
+function updateKeyName(task) {
+	let keyTitleMap = {
+		'developer': 'Developer',
+		'title': 'Title',
+		'pri': 'PRI',
+		'status': 'Status',
+		'devProgress': 'Dev (%)',
+		'qaProgress': 'QA (%)',
+		'qa': 'QA',
+		'project': 'Project',
+		'eta': 'ETA'
+	};
+	let result = {};
+
+	Object.keys(task).forEach((key) => {
+		result[keyTitleMap[key]] = task[key];
+	});
+
+	return result;
+}
+
+function formatResponse(data) {
+	let result = List.of();
+
+	data.forEach((task) => {
+		let updatedTask = updateKeyName(task);
+		result = result.push(OrderedMap(updatedTask));
+	});
+
+	return result;
+}
+
 export default function taskReducer(state = initialState, action) {
 	let nextState = state;
 	switch (action.type) {
@@ -117,6 +169,20 @@ export default function taskReducer(state = initialState, action) {
 						'Project': ''
 					})
 				);
+		case actionTypes.SET_LOADING_STATE:
+			return state.set('isLoading', action.state);
+		case actionTypes.FETCH_TASKS_SUCCESS:
+			let formatedData = formatResponse(action.data);
+			return state
+			    .set('isLoading', false)
+			    .set('loadingError', undefined)
+			    .set('bugsTableOriginalData', formatedData)
+			    .set('bugsTableData', formatedData);
+		case actionTypes.FETCH_TASKS_FAILURE:
+			alert(action.err);
+			return state
+			    .set('isLoading', false)
+			    .set('loadingError', fromJS(action.err));
 		default:
 			return state;
 	}

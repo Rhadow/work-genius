@@ -1,14 +1,30 @@
-import { crawlerPromise, extractYahooNewsHeader } from './crawler';
-import http from 'http';
+// Express
+import express from 'express';
+import bodyParser from 'body-parser';
 
-http.createServer(async (req, res) => {
-	let body, result;
-	try {
-		body = await crawlerPromise('https://tw.yaoo.com/');
-		result = JSON.stringify(extractYahooNewsHeader(body));
-	} catch (e) {
-		result = e;
-	}
+// GraphQL and schema
+import { graphql } from 'graphql';
+import schema from './schema/schema.js';
 
-	res.end(result);
-}).listen(3000);
+const PORT = 3000;
+let app = express();
+
+app.use(bodyParser.text({
+	type: 'application/graphql'
+}));
+
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+	next();
+});
+
+app.post('/graphql', (req, res) => {
+	graphql(schema, req.body).then((result) => {
+		res.send(JSON.stringify(result, null, 4));
+	});
+});
+
+app.listen(PORT, () => {
+	console.log(`Server is listening at port: ${PORT}`);
+});
